@@ -1,5 +1,5 @@
 const express = require('express');
-const database = require('./connect');
+const database = require('../connect');
 const ObjectId = require('mongodb').ObjectId;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
