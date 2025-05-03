@@ -1,3 +1,5 @@
+import { useContext } from 'react'; 
+import { UserContext } from '../components/UserContext'; 
 import DayCard from '../components/DayCard';
 
 const daysOfWeek = [
@@ -11,6 +13,7 @@ const daysOfWeek = [
 ];
 
 const WeekView = ({ chores }) => {
+
   {/* 
   Controls how weekdays appear in a grid
     - original Tailwind className = 'grid grid-cols-4 gap-4'
@@ -22,6 +25,12 @@ const WeekView = ({ chores }) => {
     ? chores.filter(chore => chore && typeof chore === 'object' && chore.day)
     : [];
     
+
+  //pull in user info from user context container 
+  const { user } = useContext(UserContext); 
+  //boolean saying if user.type strictly equal to parent, then canEdit is set to true 
+  const canEdit = user?.type === 'parent'; 
+
 
   return (
     <div className='grid grid-cols-7 gap-4'>
@@ -36,10 +45,11 @@ const WeekView = ({ chores }) => {
             - Daniel - added a filter function above the original logic to ensure proper loading of website
         */}
 
-        return <DayCard key={day} day={day} chores={choresForDay} />;
+        return <DayCard key={day} day={day} chores={choresForDay} canEdit={canEdit} />;
       })}
     </div>
   );
 };
 
 export default WeekView;
+

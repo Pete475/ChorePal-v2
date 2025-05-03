@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { UserContext } from '../components/UserContext';
 import './Login.css';
 
 function Login() {
@@ -10,6 +11,9 @@ function Login() {
   const [success, setSuccess] = useState(false);
 
   const BASE_URL = 'http://localhost:3000';
+
+  //grabs login function from UserContext page
+  const { login } = useContext(UserContext);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -35,6 +39,10 @@ function Login() {
           setSuccess(true);
           setError('');
           localStorage.setItem('token', data.token);
+          //updates userContext data & local storage so user can persist until logout
+          // for Kevin -> should DB Object be structured as below??
+          // { "success" : true/false, "token" : "token code here", "user": { "name": "Name Here", "type": "parent"}}
+          login(data.user);
           window.location.href = '/dashboard';
         } else {
           setError(data.message);

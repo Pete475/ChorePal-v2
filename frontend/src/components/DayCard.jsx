@@ -1,9 +1,18 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AddChoreForm from './AddChore';
 
-const DayCard = ({ day, chores }) => {
+const DayCard = ({ day, chores, canEdit }) => {
   const [showAddForm, setShowAddForm] = useState(false);
+  const [isParent, setIsParent] = useState(null);
 
+  // if canEdit changes, useEffect will run -- setting isParent
+  useEffect(() => {
+    if (canEdit) {
+      setIsParent(true);
+    }
+  }, [canEdit]);
+
+  //conditional isParent (with button below) makes it so button to add chores only shows up if user.type === 'parent'
   return (
     <div className="flex flex-col"> {/* New Parent Div to contain both parts in a reversed manner */}
     {/*
@@ -42,6 +51,7 @@ const DayCard = ({ day, chores }) => {
           <p className='text-sm text-white/70 italic'>No chores assigned.</p>
         )}
 
+
         {/*
         Logic for "+ New Chore" Popup
           - Previously, clicking on "Add New Chore" revealed a hidden div within the Day Card
@@ -52,6 +62,16 @@ const DayCard = ({ day, chores }) => {
               1. Maximize chore display space
               2. Eliminate visual clutter when adding a chore
         */}
+
+
+        {isParent && (
+          <button
+            onClick={() => setShowAddForm(true)}
+            className='self-start bg-accentOrange text-white rounded-full px-4 py-2 text-sm font-semibold hover:bg-accentOrangeDark transition duration-200'
+          >
+            Add New Chore
+          </button>
+        )}
 
         {showAddForm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
