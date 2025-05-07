@@ -3,6 +3,7 @@ import { fetchChores } from '../redux/choreSlice';
 import { useEffect } from 'react';
 import WeekView from '../components/WeekView';
 import Navbar from '../components/Navbar';
+import { UserContext } from '../components/UserContext';
 
 function Dashboard() {
   const dispatch = useDispatch();
