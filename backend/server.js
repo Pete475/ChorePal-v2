@@ -1,9 +1,9 @@
 const connect = require('./connect'); // module that handles connecting to mongodb
 const express = require('express');
 const cors = require('cors'); //cors allows frontend to talk to backend
-const users = require('./userRoutes');
-const chores = require('./choreRoutes');
-const child = require('./childRoutes');
+const users = require('./routes/userRoutes');
+const chores = require('./routes/choreRoutes');
+const child = require('./routes/childRoutes');
 
 const app = express();
 const PORT = 3000;
