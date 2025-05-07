@@ -1,33 +1,26 @@
-const connect = require('./connect'); // module that handles connecting to mongodb
 const express = require('express');
-const cors = require('cors'); //cors allows frontend to talk to backend
-const users = require('./routes/userRoutes');
-const chores = require('./routes/choreRoutes');
-const child = require('./routes/childRoutes');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const cors = require('cors');
+
+dotenv.config();
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-app.use(cors()); //allows requests from react frontend
-app.use(express.json()); //parses incoming json data in request body
-app.use(users);
-app.use(chores);
-app.use(child);
+app.use(cors());
+app.use(express.json());
 
-//connect to DB, then start server
-async function startServer() {
-  try {
-    await connect.connectToServer();
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-    });
-  } catch (err) {
-    console.error(`Failed to start server due to DB connection error.`);
-  }
-}
-startServer();
+// MongoDB
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log('MongoDB connected'))
+  .catch((err) => console.error('MongoDB connection error:', err));
 
-// app.listen(PORT, () => {
-//   connect.connectToServer();
-//   console.log(`Server is running on port ${PORT}`);
-// });
+app.get('/', (req, res) => {
+  res.send('Server is running!');
+});
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+});
