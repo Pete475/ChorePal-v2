@@ -7,6 +7,11 @@ const userSchema = new Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   username: { type: String, required: true },
+  type: {
+    type: String,
+    enum: ['parent', 'child'],
+    required: true,
+  },
 });
 
 // Hash the password on 'save'
@@ -24,12 +29,16 @@ userSchema.pre('save', async function (next) {
 const childSchema = new Schema({
   name: { type: String, required: true },
   parentId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  userRef: { type: Schema.Types.ObjectId, ref: 'User' },
 });
 
 /*---------- CHORE ----------*/
 const choreSchema = new Schema({
-  title: { type: String, required: true },
-  description: String,
+  template: {
+    type: Schema.Types.ObjectId,
+    ref: 'ChoreList',
+    required: true,
+  },
   by: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   to: { type: Schema.Types.ObjectId, ref: 'Child', required: true },
   day: {
@@ -53,8 +62,16 @@ const choreSchema = new Schema({
   },
 });
 
+/*---------- CHORE LIST ----------*/
+const choreListSchema = new Schema({
+  title: { type: String, required: true },
+  description: String,
+  owner: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+});
+
 const User = mongoose.model('User', userSchema);
 const Child = mongoose.model('Child', childSchema);
 const Chore = mongoose.model('Chore', choreSchema);
+const ChoreList = mongoose.model('ChoreList', choreListSchema);
 
-module.exports = { User, Child, Chore };
+module.exports = { User, Child, Chore, ChoreList };
