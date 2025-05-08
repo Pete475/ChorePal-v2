@@ -3,19 +3,20 @@ import { UserContext } from '../components/UserContext';
 import DayCard from '../components/DayCard';
 
 const daysOfWeek = [
+  'sunday',
   'monday',
   'tuesday',
   'wednesday',
   'thursday',
   'friday',
-  'saturday',
-  'sunday',
+  'saturday'
 ];
+  {/* Daniel - changed order so that Sunday comes first, like a regular calendar */}
 
 const WeekView = ({ chores }) => {
 
   {/* 
-  Controls how weekdays appear in a grid
+    Controls how weekdays appear in a grid
     - original Tailwind className = 'grid grid-cols-4 gap-4'
     - Daniel - changed to 7 columns for a traditional calendar view
   */}
@@ -31,9 +32,13 @@ const WeekView = ({ chores }) => {
   //boolean saying if user.type strictly equal to parent, then canEdit is set to true 
   const canEdit = user?.type === 'parent'; 
 
-
+  {/* 
+    Daniel - 5/3 - changed parent div from simple grid to flex for better control 
+    Daniel - 5/6 - changed it back to grid layouts after further research
+    */}
   return (
-    <div className='grid grid-cols-7 gap-4'>
+    <div className="px-10">
+    <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4'>
       {daysOfWeek.map((day) => {
         const choresForDay = validChores.filter(
           (chore) => chore.day.toLowerCase() === day
@@ -47,6 +52,7 @@ const WeekView = ({ chores }) => {
 
         return <DayCard key={day} day={day} chores={choresForDay} canEdit={canEdit} />;
       })}
+    </div>
     </div>
   );
 };

@@ -8,27 +8,48 @@ const Navbar = () => {
  // the ?. in welcome {user?.name} simply means to not crash if no user.name found in local storage 
 
   return (
+    <div className='flex justify-between sm:px-10'>
+        {/* 5/6 - Daniel
+          - Added overarching Navbar div to better control flex
+        */}
     <div className='flex items-center'>
       <img
         src='../../public/chorepal-logo-optimized.png'
-        width='150'
-        height='150'
+        className="w-32 h-32 md:w-[150px] md:h-[150px]"
       ></img>
+        {/* 5/6 - Daniel
+          - Originally, this img had 'width/height='150''
+          - Changed to 'className="w-32 h-32 md:w-[150px] md:h-[150px]' 
+            to better control responsiveness
+        */}
       <div>
-        <h1 className='text-6xl text-white font-extrabold drop-shadow-sm'>
+        <h1 className='text-5xl md:text-6xl text-white font-extrabold drop-shadow-sm'>
           ChorePal
         </h1>
-        <h3 className='text-2xl font-semibold text-accentOrange mt-2'>
+        <h3 className='text-xl md:text-2xl font-semibold text-accentOrange mt-1 sm:mt-2'>
           Plan it. Do it.
         </h3>
-
+          {/* 5/6 - Daniel
+          - Added different sizes to headings here for responsiveness
+        */}
       </div>
-      <div className='ml-auto mr-5'>
+      </div>
+      <div className='justify-center flex flex-col ml-6 mr-6 items-end'>
+        {/* 5/6 - Daniel
+          - Originally, this div had 'ml-auto mr-5'
+          - Changed to 'justify-center flex flex-col sm:ml-6 sm:mr-6 items-end' 
+            in conjunction with above addition of overarching Navbar div
+        */}
         <Link to='/'>
-          <button onClick={logout} >Log Out</button> 
+          <button onClick={logout}>Log Out</button> 
         </Link>
-        <h4 style={{ color: 'white'}}>welcome {user?.name}! You are in {user?.type} view</h4>
-      </div>
+        <h4 className="hidden sm:block" style={{ color: 'white'}}>Welcome {user?.name}!</h4>
+        <h5 className="hidden sm:block" style={{ color: 'orange'}}>{user?.type} View</h5> 
+        {/* 5/6 - Daniel
+          - Separated original h4 into new line for increased responsiveness 
+          - Added 'hidden sm:block' to hide those headings on very small screens 
+        */}
+    </div>
     </div>
   );
 };

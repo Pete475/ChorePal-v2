@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react';
 import { UserContext } from '../components/UserContext';
-import './Login.css';
+import 'tailwindcss';
 
 function Login() {
   const [isLoginMode, setIsLoginMode] = useState(true);
@@ -75,73 +75,95 @@ function Login() {
   }
 
   return (
-    <div className='wrapper'>
-      <div>
-        <h2>
-          Welcome to ChorePal<br></br>
-          {isLoginMode ? 'Login' : 'Create Account'}
-        </h2>
-        <form onSubmit={handleSubmit}>
-          {!isLoginMode && (
-            <>
-              <label htmlFor='name'>Name:</label>
-              <br />
+    // Apply the same gradient background as Dashboard
+    <div className="min-h-screen bg-gradient-to-b from-[#4f72d7] to-[#2647a5] flex items-center justify-center p-4">
+      {/* Similar styling to DayCard component */}
+      <div className="bg-gradient-to-b from-primaryDark to-[#1a2844] text-white rounded-2xl shadow-lg p-8 w-full max-w-md">
+        {/* Logo and Title Section */}
+        <div className="flex flex-col items-center mb-2">
+          <img 
+            src="../../public/chorepal-logo-optimized.png" 
+            className="w-24 h-24" 
+            alt="ChorePal Logo" 
+          />
+          <h1 className="text-4xl font-extrabold text-white drop-shadow-sm">ChorePal</h1>
+          <h3 className="text-xl font-semibold text-accentOrange mt-1">Plan it. Do it.</h3>
+        </div>
+
+        {/* Credential Form Container */}
+        <div className="bg-surfaceLight rounded-xl pt-3 pl-5 pr-5 pb-3">
+          <form onSubmit={handleSubmit} className="text-primaryDark">
+            {!isLoginMode && (
+              <div className="mb-4">
+                <label htmlFor="name" className="block text-white font-semibold mb-2">Name</label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-accentOrange"
+                />
+              </div>
+            )}
+
+            <div className="mb-4">
+              <label htmlFor="email" className="block text-white font-semibold mb-2">Email</label>
               <input
-                type='text'
-                id='name'
-                name='name'
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                type="email"
+                id="email"
+                name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-accentOrange"
               />
-              <br />
-              <br />
-            </>
-          )}
+            </div>
 
-          <label htmlFor='email'>Email:</label>
-          <br />
-          <input
-            type='text'
-            id='email'
-            name='email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <br />
-          <br />
+            <div className="mb-6">
+              <label htmlFor="password" className="block text-white font-semibold mb-2">Password</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-accentOrange mb-2"
+              />
+            </div>
 
-          <label htmlFor='password'>Password:</label>
-          <br />
-          <input
-            type='password'
-            id='password'
-            name='password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <br />
-          <br />
-
-          <button type='submit'>
-            {isLoginMode ? 'Login' : 'Create Account'}
+            {/* Primary Button - Similar to "+ New Chore" button */}
+            <div className="flex justify-center">
+            <button 
+              type="submit"
+              className="w-40 bg-accentOrange text-white rounded-xl px-4 py-2 text-md font-semibold hover:bg-accentOrangeDark transition duration-200"
+            >
+              {isLoginMode ? 'Log In' : 'Create Account'}
+            </button>
+            </div>
+          </form>
+          </div>
+            <div className='flex justify-center mb-10'>
+          {/* Secondary Action Button */}
+          <button 
+            onClick={switchMode} 
+            className="w-40 mt-4 bg-transparent border border-white text-white rounded-xl px-4 py-2 text-sm font-semibold hover:bg-white/10 transition duration-200"
+          >
+            {isLoginMode ? 'Create Account' : 'Log In'}
           </button>
-        </form>
 
-        <button onClick={switchMode} style={{ marginTop: '10px' }}>
-          {isLoginMode ? 'Create an account' : 'Already have an account? Login'}
-        </button>
-
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        {success && (
-          <p style={{ color: 'green' }}>
-            {isLoginMode
-              ? 'Login successful!'
-              : 'Account created! Please login.'}
-          </p>
-        )}
+          {/* Status Messages */}
+          {error && <p className="mt-4 text-red-500 text-center">{error}</p>}
+          {success && (
+            <p className="mt-4 text-green-400 text-center">
+              {isLoginMode
+                ? 'Login successful!'
+                : 'Account created! Please login.'}
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );

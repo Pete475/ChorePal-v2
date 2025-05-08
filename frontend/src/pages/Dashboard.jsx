@@ -14,7 +14,10 @@ function Dashboard() {
   }, [dispatch]);
 
   return (
-    <div>
+    <div className='min-h-screen bg-gradient-to-b from-[#4f72d7] to-[#2647a5]'>
+      {/* 5/6 - Daniel
+        - Added className here to eliminate whitespace at the bottom
+      */}
       <Navbar />
       {loading && <p>Loading chores...</p>}
       {error && <p>Error: {error}</p>}
