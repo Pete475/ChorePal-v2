@@ -64,9 +64,13 @@ const choreSchema = new Schema({
 
 /*---------- CHORE LIST ----------*/
 const choreListSchema = new Schema({
-  title: { type: String, required: true },
-  description: String,
   owner: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  chores: [
+    {
+      title: { type: String, required: true },
+      description: String,
+    },
+  ],
 });
 
 const User = mongoose.model('User', userSchema);
