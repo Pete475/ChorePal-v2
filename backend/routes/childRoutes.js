@@ -1,68 +1,59 @@
 const express = require('express');
-const database = require('../connect');
-const ObjectId = require('mongodb').ObjectId;
-const jwt = require('jsonwebtoken');
-require('dotenv').config({ path: './config.env' });
+const router = express.Router();
+const { User, Child } = require('../model');
+const authMiddleware = require('../middleware/auth');
 
-let childRoutes = express.Router();
+// ---------- Add a child (only for parent users) ----------
+router.post('/add', authMiddleware, async (req, res) => {
+  const userId = req.user.id;
+  const userType = req.user.type;
+  const { name } = req.body;
 
-// #1 retrieve all
-// http://localhost:3000/chores
-childRoutes.route('/children').get(async (req, res) => {
-  let db = database.getDb();
-  let data = await db.collection('child').find({}).toArray();
-  if (data.length > 0) {
-    res.json(data);
-  } else {
-    throw new Error('Data was not found :(');
+  if (!name) {
+    return res.status(400).json({ error: 'Child name is required' });
+  }
+
+  if (userType !== 'parent') {
+    return res
+      .status(403)
+      .json({ error: 'Only parent users can add children' });
+  }
+
+  try {
+    const newChild = new Child({
+      name,
+      parentId: userId,
+    });
+
+    await newChild.save();
+
+    res
+      .status(201)
+      .json({ message: 'Child added successfully', child: newChild });
+  } catch (err) {
+    console.error('Error adding child:', err);
+    res.status(500).json({ error: 'Failed to add child' });
   }
 });
-// #2 retrieve one
-// http://localhost:3000/chores/id
-childRoutes.route('/children/:id').get(async (req, res) => {
-  let db = database.getDb();
-  let data = await db
-    .collection('child')
-    .findOne({ _id: new ObjectId(req.params.id) });
-  if (Object.keys(data).length > 0) {
-    res.json(data);
-  } else {
-    throw new Error('Data was not found :(');
+
+// ---------- Get all children of current parent ----------
+router.get('/', authMiddleware, async (req, res) => {
+  const userId = req.user.id;
+  const userType = req.user.type;
+
+  if (userType !== 'parent') {
+    return res
+      .status(403)
+      .json({ error: 'Only parent users can view children' });
+  }
+
+  try {
+    const children = await Child.find({ parentId: userId });
+    res.json({ children });
+  } catch (err) {
+    console.error('Error fetching children:', err);
+    res.status(500).json({ error: 'Failed to fetch children' });
   }
 });
-// #3 create one
-// http://localhost:3000/chores
-childRoutes.route('/children').post(async (req, res) => {
-  let db = database.getDb();
-  let mongoObject = {
-    username: req.body.username,
-  };
-  let data = await db.collection('child').insertOne(mongoObject);
-  res.json(data);
-});
-// #4 update one
-// http://localhost:3000/chores/id
-childRoutes.route('/children/:id').put(async (req, res) => {
-  let db = database.getDb();
-  let mongoObject = {
-    $set: {
-      username: req.body.username,
-    },
-  };
-  let data = await db
-    .collection('child')
-    .updateOne({ _id: new ObjectId(req.params.id) }, mongoObject);
-  res.json(data);
-});
 
-// #5 delete one
-// http://localhost:3000/chores/id
-childRoutes.route('/children/:id').delete(async (req, res) => {
-  let db = database.getDb();
-  let data = await db
-    .collection('child')
-    .deleteOne({ _id: new ObjectId(req.params.id) });
-  res.json(data);
-});
-
-module.exports = childRoutes;
+module.exports = router;

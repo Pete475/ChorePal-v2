@@ -1,9 +1,28 @@
 const express = require('express');
 const router = express.Router();
-const { User } = require('../model');
+const { User, ChoreList } = require('../model');
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+
+const DEFAULT_CHORES = [
+  { title: 'Do Laundry', description: 'Wash and fold clothes' },
+  {
+    title: 'Take Out Trash',
+    description: 'Empty trash bins and take garbage outside',
+  },
+  {
+    title: 'Sweep the Floor',
+    description: 'Sweep dust and dirt from the floor',
+  },
+  { title: 'Wash Dishes', description: 'Clean all used dishes and utensils' },
+  {
+    title: 'Clean Room',
+    description: 'Tidy up personal items and vacuum if needed',
+  },
+  { title: 'Water Plants', description: 'Water all indoor and outdoor plants' },
+  { title: 'Feed Pets', description: 'Give food and water to pets' },
+];
 
 // ---------- Login ----------
 router.post('/login', async (req, res) => {
@@ -62,6 +81,13 @@ router.post('/register', async (req, res) => {
     // Create new user (password hash is done in pre-save hook)
     const newUser = new User({ email, password, username, type });
     await newUser.save();
+
+    // Create a default ChoreList and add default chores
+    const defaultChoreList = new ChoreList({
+      owner: newUser._id,
+      chores: DEFAULT_CHORES,
+    });
+    await defaultChoreList.save();
 
     // Return user info (exclude password)
     const userToReturn = newUser.toObject();
