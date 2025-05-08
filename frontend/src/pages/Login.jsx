@@ -9,6 +9,7 @@ function Login() {
   const [name, setName] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [userType, setUserType] = useState('parent');
 
   const BASE_URL = 'http://localhost:3000';
 
@@ -124,6 +125,24 @@ function Login() {
           />
           <br />
           <br />
+
+          {!isLoginMode && (
+            <>
+              <label htmlFor='userType'>I am a: </label>
+              <br />
+              <select
+                id='userType'
+                value={userType}
+                onChange={(e) => setUserType(e.target.value)}
+                required
+              >
+                <option value='parent'>Parent</option>
+                <option value='child'>Parent</option>
+              </select>
+              <br />
+              <br />
+            </>
+          )}
 
           <button type='submit'>
             {isLoginMode ? 'Login' : 'Create Account'}

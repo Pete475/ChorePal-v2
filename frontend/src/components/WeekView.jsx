@@ -30,7 +30,7 @@ const WeekView = ({ chores }) => {
   const { user } = useContext(UserContext); 
   //boolean saying if user.type strictly equal to parent, then canEdit is set to true 
   const canEdit = user?.type === 'parent'; 
-
+  const canCheckOff = user?.type === 'child'; 
 
   return (
     <div className='grid grid-cols-7 gap-4'>
@@ -45,7 +45,7 @@ const WeekView = ({ chores }) => {
             - Daniel - added a filter function above the original logic to ensure proper loading of website
         */}
 
-        return <DayCard key={day} day={day} chores={choresForDay} canEdit={canEdit} />;
+        return <DayCard key={day} day={day} chores={choresForDay} canEdit={canEdit} canCheckOff={canCheckOff} />;
       })}
     </div>
   );
