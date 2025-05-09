@@ -1,80 +1,90 @@
 const express = require('express');
-const database = require('../connect');
-const ObjectId = require('mongodb').ObjectId;
-const jwt = require('jsonwebtoken');
-require('dotenv').config({ path: './config.env' });
+const router = express.Router();
+const { ChoreList, Chore } = require('../model');
+const authMiddleware = require('../middleware/auth');
 
-let choreRoutes = express.Router();
+// ---------- Get all chores & chore lists for logged-in user ----------
+router.get('/', authMiddleware, async (req, res) => {
+  const userId = req.user.id;
 
-// #1 retrieve all
-// http://localhost:3000/chores
-choreRoutes.route('/chores').get(async (req, res) => {
-  let db = database.getDb();
-  let data = await db.collection('chores').find({}).toArray();
-  if (data.length > 0) {
-    res.json(data);
-  } else {
-    throw new Error('Data was not found :(');
+  try {
+    // find chore lists
+    const choreLists = await ChoreList.find({ owner: userId });
+
+    // find chores
+    const chores = await Chore.find({ by: userId })
+      .populate('to', 'name')
+      .populate('template', 'title')
+      .sort({ day: 1 });
+
+    res.json({
+      choreLists,
+      chores,
+    });
+  } catch (err) {
+    console.error('Error fetching chores:', err);
+    res.status(500).json({ error: 'Failed to fetch chores' });
   }
 });
-// #2 retrieve one
-// http://localhost:3000/chores/id
-choreRoutes.route('/chores/:id').get(async (req, res) => {
-  let db = database.getDb();
-  let data = await db
-    .collection('chores')
-    .findOne({ _id: new ObjectId(req.params.id) });
-  if (Object.keys(data).length > 0) {
-    res.json(data);
-  } else {
-    throw new Error('Data was not found :(');
+
+// ---------- Add a new assigned chore (1 chore list per user) ----------
+router.post('/add', authMiddleware, async (req, res) => {
+  const userId = req.user.id;
+  const { title, childId, day } = req.body;
+
+  if (!title || !childId || !day) {
+    return res.status(400).json({ error: 'All fields are required' });
+  }
+
+  try {
+    // Check if user has a list
+    const choreList = await ChoreList.findOne({ owner: userId });
+    if (!choreList) {
+      return res.status(404).json({ error: 'No chore list found for user' });
+    }
+
+    // Check if chore is in list
+    const matched = choreList.chores.find((chore) => chore.title === title);
+    if (!matched) {
+      return res.status(404).json({ error: 'Chore not found in chore list' });
+    }
+
+    // Create chore
+    const newChore = new Chore({
+      template: choreList._id,
+      by: userId,
+      to: childId,
+      day,
+      status: false,
+    });
+
+    await newChore.save();
+
+    res
+      .status(201)
+      .json({ message: 'Chore assigned successfully', chore: newChore });
+  } catch (err) {
+    console.error('Error assigning chore:', err);
+    res.status(500).json({ error: 'Failed to assign chore' });
   }
 });
-// #3 create one
-// http://localhost:3000/chores
-choreRoutes.route('/chores').post(async (req, res) => {
-  let db = database.getDb();
-  let mongoObject = {
-    choreName: req.body.choreName,
-    isWeekly: req.body.isWeekly,
-    isCompleted: req.body.isCompleted,
-    rating: req.body.rating,
-    childName: req.body.childName,
-    image: req.body.image,
-    day: req.body.day,
-  };
-  let data = await db.collection('chores').insertOne(mongoObject);
-  res.json(data);
-});
-// #4 update one
-// http://localhost:3000/chores/id
-choreRoutes.route('/chores/:id').put(async (req, res) => {
-  let db = database.getDb();
-  let mongoObject = {
-    $set: {
-      choreName: req.body.choreName,
-      isWeekly: req.body.isWeekly,
-      isCompleted: req.body.isCompleted,
-      rating: req.body.rating,
-      childName: req.body.childName,
-      image: req.body.image,
-      day: req.body.day,
-    },
-  };
-  let data = await db
-    .collection('chores')
-    .updateOne({ _id: new ObjectId(req.params.id) }, mongoObject);
-  res.json(data);
+
+// ---------- Get chore list of current user ----------
+router.get('/list', authMiddleware, async (req, res) => {
+  const userId = req.user.id;
+
+  try {
+    const choreList = await ChoreList.findOne({ owner: userId });
+
+    if (!choreList) {
+      return res.status(404).json({ error: 'Chore list not found' });
+    }
+
+    res.json({ choreList });
+  } catch (err) {
+    console.error('Error fetching chore list:', err);
+    res.status(500).json({ error: 'Failed to fetch chore list' });
+  }
 });
 
-// #5 delete one
-// http://localhost:3000/chores/id
-choreRoutes.route('/chores/:id').delete(async (req, res) => {
-  let db = database.getDb();
-  let data = await db
-    .collection('chores')
-    .deleteOne({ _id: new ObjectId(req.params.id) });
-  res.json(data);
-});
-
-module.exports = choreRoutes;
+module.exports = router;

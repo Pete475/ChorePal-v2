@@ -3,6 +3,10 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 
+const authRoutes = require('./routes/authRoutes');
+const choreRoutes = require('./routes/choreRoutes');
+const childRoutes = require('./routes/childRoutes');
+
 dotenv.config();
 
 const app = express();
@@ -10,6 +14,10 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
+
+app.use('/api/auth', authRoutes);
+app.use('/api/chore', choreRoutes);
+app.use('/api/child', childRoutes);
 
 // MongoDB
 mongoose
