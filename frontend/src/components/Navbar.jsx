@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
-import { UserContext } from '../components/UserContext'; 
-import { useContext } from 'react'; 
+import { UserContext } from '../components/UserContext';
+import { useContext } from 'react';
 
 const Navbar = () => {
-  const { logout, user } = useContext(UserContext); 
- //useContext logout (onclick button) will take curr. user out of localStorage (and associated token)
- // the ?. in welcome {user?.name} simply means to not crash if no user.name found in local storage 
+  const { logout, user } = useContext(UserContext);
+  //useContext logout (onclick button) will take curr. user out of localStorage (and associated token)
+  // the ?. in welcome {user?.name} simply means to not crash if no user.name found in local storage
 
   return (
     <div className='flex items-center'>
@@ -21,13 +21,14 @@ const Navbar = () => {
         <h3 className='text-2xl font-semibold text-accentOrange mt-2'>
           Plan it. Do it.
         </h3>
-
       </div>
       <div className='ml-auto mr-5'>
         <Link to='/'>
-          <button onClick={logout} >Log Out</button> 
+          <button onClick={logout}>Log Out</button>
         </Link>
-        <h4 style={{ color: 'white'}}>welcome {user?.name}! You are in {user?.type} view</h4>
+        <h4 style={{ color: 'white' }}>
+          welcome {user?.username}! You are in {user?.type} view
+        </h4>
       </div>
     </div>
   );

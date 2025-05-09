@@ -1,48 +1,48 @@
-import { useContext, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { UserContext } from '../components/UserContext';
 import DayCard from '../components/DayCard';
 import AddChild from './AddChild';
 
-const daysOfWeek = [
-  'monday',
-  'tuesday',
-  'wednesday',
-  'thursday',
-  'friday',
-  'saturday',
-  'sunday',
-];
-
 const WeekView = ({ chores }) => {
-  {
-    /* Daniel - Added validChores filter to eliminate loading error w/ chores missing fields */
-  }
-  const validChores = Array.isArray(chores)
-    ? chores.filter((chore) => chore && typeof chore === 'object' && chore.day)
-    : [];
+  const [localChores, setLocalChores] = useState([]);
 
-  //pull in user info from user context container
+  useEffect(() => {
+    if (Array.isArray(chores)) {
+      setLocalChores(chores);
+    }
+  }, [chores]);
+
+  const toggleChoreStatus = (choreId) => {
+    setLocalChores((prevChores) =>
+      prevChores.map((chore) =>
+        chore._id === choreId
+          ? { ...chore, status: !chore.status }
+          : chore
+      )
+    );
+  };
+
   const { user } = useContext(UserContext);
-  //boolean saying if user.type strictly equal to parent, then canEdit is set to true
   const canEdit = user?.type === 'parent';
-  const canCheckOff = user?.type === 'child';
+  const canCheckOff = user?.type === 'child' || user?.type === 'parent';
+
   const [showAddChild, setShowAddChild] = useState(false);
+
+  const validChores = localChores.filter(
+    (chore) => chore && typeof chore === 'object' && chore.day
+  );
+
+  const daysOfWeek = [
+    'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday',
+  ];
 
   return (
     <div>
       <div className='grid grid-cols-7 gap-4'>
         {daysOfWeek.map((day) => {
           const choresForDay = validChores.filter(
-            (chore) => chore.day.toLowerCase() === day
+            (chore) => chore.day.toLowerCase() === day.toLowerCase()
           );
-          {
-            /*
-          Previously, this part was causing an error:
-            - (chore) => chore.day.toLowerCase() === day
-            - Uncaught TypeError: Cannot read properties of null (reading 'toLowerCase')
-            - Daniel - added a filter function above the original logic to ensure proper loading of website
-        */
-          }
 
           return (
             <DayCard
@@ -51,13 +51,14 @@ const WeekView = ({ chores }) => {
               chores={choresForDay}
               canEdit={canEdit}
               canCheckOff={canCheckOff}
+              onToggleStatus={toggleChoreStatus}
             />
           );
         })}
       </div>
-      
+
       {canEdit && (
-        <div className=''>
+        <div>
           <button onClick={() => setShowAddChild(true)}>Add A New Child</button>
         </div>
       )}
