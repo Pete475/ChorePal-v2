@@ -1,25 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addChore, fetchChores } from '../redux/choreSlice';
+import { fetchChildren } from '../redux/childSlice'; 
 
 const AddChoreForm = ({ day, onClose }) => {
+
+  console.log('AddChoreForm mounted');
   const dispatch = useDispatch();
 
   // Grab chore lists from Redux state
   const choreLists = useSelector((state) => state.chores.choreLists);
 
   const [selectedChoreId, setSelectedChoreId] = useState('');
-  const [childName, setChildName] = useState('');
+  const [childId, setChildId] = useState('');
+  const children = useSelector((state) => state.children.list);
+
 
   // Fetch chores on mount
   useEffect(() => {
     dispatch(fetchChores());
+    dispatch(fetchChildren());
   }, [dispatch]);
 
   // test to see if chores are populating from redux correctly
   useEffect(() => {
     console.log('Chore Lists:', choreLists);
-  }, [choreLists]);
+    console.log('Children', children); 
+  }, [choreLists, children]);
 
   // Extract templates (chores) from choreLists
   const templates = choreLists;
@@ -32,7 +39,7 @@ const AddChoreForm = ({ day, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!selectedChoreId || !childName) {
+    if (!selectedChoreId || !childId) {
       alert('Please choose from both fields.');
       return;
     }
@@ -49,11 +56,11 @@ const AddChoreForm = ({ day, onClose }) => {
 
     const newChore = {
       title: selectedChore.title,
-      childId: childName,
-      day: day, 
+      childId: childId,
+      day: day,
     };
 
-    console.log('newChore:', newChore); 
+    console.log('newChore:', newChore);
 
     await dispatch(addChore(newChore));
     await dispatch(fetchChores());
@@ -79,12 +86,14 @@ const AddChoreForm = ({ day, onClose }) => {
 
       <div>
         <label>Child Name:</label>
-        <input
-          type='text'
-          value={childName}
-          onChange={(e) => setChildName(e.target.value)}
-          className='w-full border p-2 rounded'
-        />
+        <select value={childId} onChange={(e) => setChildId(e.target.value)}>
+          <option value=''>Select a child</option>
+          {children.map((child) => (
+            <option key={child._id} value={child._id}>
+              {child.name}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div className='pt-4 flex space-x-4'>

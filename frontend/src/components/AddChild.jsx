@@ -1,15 +1,25 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addChild } from '../redux/childSlice';
 
 const AddChild = ({ onClose }) => {
   const [name, setName] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  //   const [username, setUsername] = useState('');
+  //   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e) => {
+  const dispatch = useDispatch();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     //sent info to backend & create a new child (to do)
-    console.log({ name, username, password });
-    onClose();
+
+    try {
+      await dispatch(addChild(name));
+    //   await dispatch(fetchChildren());
+      onClose();
+    } catch (err) {
+      console.error('Failed to add child:', err);
+    }
   };
 
   return (
@@ -25,7 +35,7 @@ const AddChild = ({ onClose }) => {
           onChange={(e) => setName(e.target.value)}
         />
       </label>
-      <label className='block text-sm font-medium text-gray-700'>
+      {/* <label className='block text-sm font-medium text-gray-700'>
         Username:
         <input
           type='text'
@@ -40,7 +50,7 @@ const AddChild = ({ onClose }) => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-      </label>
+      </label> */}
       <button className='flex space-x-4 pt-4' type='submit'>
         Create Child
       </button>

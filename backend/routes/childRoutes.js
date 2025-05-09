@@ -9,6 +9,8 @@ router.post('/add', authMiddleware, async (req, res) => {
   const userType = req.user.type;
   const { name } = req.body;
 
+  console.log('New child received:', name);
+
   if (!name) {
     return res.status(400).json({ error: 'Child name is required' });
   }
