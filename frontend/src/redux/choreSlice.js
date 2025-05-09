@@ -13,6 +13,8 @@ export const fetchChores = createAsyncThunk('chores/fetchChores', async () => {
   }
   const data = await response.json();
 
+  console.log('Fetched chores:', data);
+
   return data;
 });
 
@@ -27,12 +29,15 @@ export const addChore = createAsyncThunk(
       },
       body: JSON.stringify(newChore),
     });
+    console.log('Sending chore to backend:', newChore);
 
     if (!response.ok) {
       throw new Error('Failed to add chore');
     }
 
     const data = await response.json();
+    
+
     return data;
   }
 );

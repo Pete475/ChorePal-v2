@@ -32,6 +32,8 @@ router.post('/add', authMiddleware, async (req, res) => {
   const userId = req.user.id;
   const { title, childId, day } = req.body;
 
+  console.log('backened add chore', req.body); 
+
   if (!title || !childId || !day) {
     return res.status(400).json({ error: 'All fields are required' });
   }

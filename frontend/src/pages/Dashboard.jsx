@@ -10,8 +10,11 @@ function Dashboard() {
   const { chores, loading, error } = useSelector((state) => state.chores);
 
   useEffect(() => {
+    console.log('Dispatching fetchChores');
     dispatch(fetchChores());
   }, [dispatch]);
+
+  console.log('dashboard:', chores);
 
   return (
     <div>
