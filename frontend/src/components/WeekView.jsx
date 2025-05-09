@@ -4,13 +4,13 @@ import DayCard from '../components/DayCard';
 import AddChild from './AddChild';
 
 const daysOfWeek = [
-  'monday',
-  'tuesday',
-  'wednesday',
-  'thursday',
-  'friday',
-  'saturday',
-  'sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday',
 ];
 
 const WeekView = ({ chores }) => {
@@ -55,7 +55,7 @@ const WeekView = ({ chores }) => {
           );
         })}
       </div>
-      
+
       {canEdit && (
         <div className=''>
           <button onClick={() => setShowAddChild(true)}>Add A New Child</button>
