@@ -9,6 +9,7 @@ function Login() {
   const [name, setName] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false); // 5/8 - Daniel - Added for error popup
 
   const BASE_URL = 'http://localhost:3000';
 
@@ -31,6 +32,12 @@ function Login() {
         },
         body: JSON.stringify(payload),
       });
+
+      // Check if the response is actually JSON before trying to parse it
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error(`Expected JSON response but got ${contentType}`);
+      }
 
       const data = await response.json();
 
@@ -61,6 +68,7 @@ function Login() {
     } catch (err) {
       console.error('Error:', err);
       setError('Something went wrong. Please try again.');
+      setShowErrorModal(true); // 5/8 - Daniel - added for error popup
       setSuccess(false);
     }
   }
@@ -76,9 +84,9 @@ function Login() {
 
   return (
     // Apply the same gradient background as Dashboard
-    <div className="min-h-screen bg-gradient-to-b from-[#4f72d7] to-[#2647a5] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-b from-[#78C0E0] to-[#5DA9E9] flex items-center justify-center p-4">
       {/* Similar styling to DayCard component */}
-      <div className="bg-gradient-to-b from-primaryDark to-[#1a2844] text-white rounded-2xl shadow-lg p-8 w-full max-w-md">
+      <div className="bg-gradient-to-b from-[#003459] to-[#00171F] text-white rounded-2xl shadow-lg p-8 w-full max-w-md">
         {/* Logo and Title Section */}
         <div className="flex flex-col items-center mb-2">
           <img 
@@ -87,7 +95,7 @@ function Login() {
             alt="ChorePal Logo" 
           />
           <h1 className="text-4xl font-extrabold text-white drop-shadow-sm">ChorePal</h1>
-          <h3 className="text-xl font-semibold text-accentOrange mt-1">Plan it. Do it.</h3>
+          <h3 className="text-xl font-semibold text-[#FFD166] mt-1">Plan it. Do it.</h3>
         </div>
 
         {/* Credential Form Container */}
@@ -103,7 +111,7 @@ function Login() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-accentOrange"
+                  className="bg-white w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-accentOrange"
                 />
               </div>
             )}
@@ -117,7 +125,7 @@ function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-accentOrange"
+                className="bg-white w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-accentOrange"
               />
             </div>
 
@@ -130,7 +138,7 @@ function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-accentOrange mb-2"
+                className="bg-white w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-accentOrange mb-2"
               />
             </div>
 
@@ -138,7 +146,7 @@ function Login() {
             <div className="flex justify-center">
             <button 
               type="submit"
-              className="w-40 bg-accentOrange text-white rounded-xl px-4 py-2 text-md font-semibold hover:bg-accentOrangeDark transition duration-200"
+              className="w-40 bg-[#FF6B6B] text-white rounded-xl px-4 py-2 text-md font-semibold hover:bg-accentOrangeDark transition duration-200"
             >
               {isLoginMode ? 'Log In' : 'Create Account'}
             </button>
@@ -149,11 +157,13 @@ function Login() {
           {/* Secondary Action Button */}
           <button 
             onClick={switchMode} 
-            className="w-40 mt-4 bg-transparent border border-white text-white rounded-xl px-4 py-2 text-sm font-semibold hover:bg-white/10 transition duration-200"
+            className="w-40 mt-4 bg-transparent border border-[#FFD166] text-[#FFD166] rounded-xl px-4 py-2 text-sm font-semibold hover:bg-white/10 transition duration-200"
           >
             {isLoginMode ? 'Create Account' : 'Log In'}
           </button>
+          </div>
 
+          <div className="mb-6">
           {/* Status Messages */}
           {error && <p className="mt-4 text-red-500 text-center">{error}</p>}
           {success && (
@@ -163,7 +173,26 @@ function Login() {
                 : 'Account created! Please login.'}
             </p>
           )}
-        </div>
+          </div>
+
+          {/* Error Modal Popup */}
+          {showErrorModal && error && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+              <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4 shadow-lg text-primaryDark">
+                <h3 className="text-center text-xl font-bold text-red-500 mb-4">Error</h3>
+                <p className="text-center mb-6">{error}</p>
+                <div className="flex justify-center">
+                  <button 
+                    onClick={() => setShowErrorModal(false)}
+                    className="bg-[#FF6B6B] hover:bg-[#FF5252] text-white font-semibold py-2 px-6 rounded-lg transition duration-200"
+                  >
+                    OK
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
       </div>
     </div>
   );

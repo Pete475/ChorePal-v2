@@ -14,7 +14,7 @@ function Dashboard() {
   }, [dispatch]);
 
   return (
-    <div className='min-h-screen bg-gradient-to-b from-[#4f72d7] to-[#2647a5]'>
+    <div className='min-h-screen bg-gradient-to-b from-[#78C0E0] to-[#5DA9E9]'>
       {/* 5/6 - Daniel
         - Added className here to eliminate whitespace at the bottom
       */}

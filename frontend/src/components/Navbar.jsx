@@ -26,7 +26,7 @@ const Navbar = () => {
         <h1 className='text-5xl md:text-6xl text-white font-extrabold drop-shadow-sm'>
           ChorePal
         </h1>
-        <h3 className='text-xl md:text-2xl font-semibold text-accentOrange mt-1 sm:mt-2'>
+        <h3 className='text-xl md:text-2xl font-semibold text-[#FFD166] mt-1 sm:mt-2'>
           Plan it. Do it.
         </h3>
           {/* 5/6 - Daniel
@@ -41,7 +41,10 @@ const Navbar = () => {
             in conjunction with above addition of overarching Navbar div
         */}
         <Link to='/'>
-          <button onClick={logout}>Log Out</button> 
+          <button 
+            onClick={logout} 
+            className="bg-[#FF6B6B] hover:bg-[#FF5252] text-white px-4 py-1 rounded-lg transition duration-200"
+            >Log Out</button> 
         </Link>
         <h4 className="hidden sm:block" style={{ color: 'white'}}>Welcome {user?.name}!</h4>
         <h5 className="hidden sm:block" style={{ color: 'orange'}}>{user?.type} View</h5> 

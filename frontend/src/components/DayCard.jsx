@@ -26,7 +26,7 @@ const DayCard = ({ day, chores, canEdit }) => {
             - this fixed an issue with the words either poking out or disappearing
         - added 'break-words' to account for long words when site is shrunk
     */}
-    <div className='bg-gradient-to-b from-primaryDark to-[#1a2844] text-white rounded-2xl shadow-lg p-5 flex flex-shrink-0 flex-col gap-5 mt-6 w-full'>
+    <div className='bg-gradient-to-b from-[#003459] to-[#00171F] text-white rounded-2xl shadow-lg p-5 flex flex-shrink-0 flex-col gap-5 mt-6 w-full'>
       <h3 className='text-xl font-bold tracking-wide truncate text-center'>{day.toUpperCase()}</h3>
       {/*
       New Chore Button
@@ -35,7 +35,7 @@ const DayCard = ({ day, chores, canEdit }) => {
     */}
         <button
           onClick={() => setShowAddForm(true)}
-          className='self-center bg-accentOrange text-white rounded-full px-2 py-1 text-sm font-semibold hover:bg-accentOrangeDark transition duration-200'
+          className='self-center bg-[#FF6B6B] text-white rounded-full px-2 py-1 text-sm font-semibold hover:bg-accentOrangeDark transition duration-200'
         >+ New Chore
         </button>
 
@@ -47,7 +47,7 @@ const DayCard = ({ day, chores, canEdit }) => {
                 key={chore._id}
                 className='text-base font-semibold list-none'
               ><div className='flex items-center flex-col mb-4 rounded hover:bg-blue-800/30'>
-                  <div className="text-accentOrange">{chore.childName}</div>
+                  <div className="text-[#FFD166]">{chore.childName}</div>
                   <div className="text-white">{chore.choreName}</div>
                 </div>
                   {/* 5/6 - Daniel 

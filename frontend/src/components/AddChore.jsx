@@ -33,14 +33,14 @@ const AddChoreForm = ({ day, onClose }) => {
     <div>
       {/*
       Previously had a duplicate that was also present in DayCard.jsx:
-        <h3>Add New Chore for {day.toUpperCase()}</h3>
+        - <h3>Add New Chore for {day.toUpperCase()}</h3>
         - Daniel - removed duplicate on AddChore.jsx
       */}
       
       {/* Daniel - added className here to add vertical spacing between all child elements */}
       <form onSubmit={handleSubmit} className="space-y-4">  
         <div>
-          <label>Chore Name:</label>
+          <label className='text-md font-semibold text-[#FFD166] mt-1 sm:mt-2'>Chore Name:</label>
           <input
             type='text'
             value={choreName}
@@ -48,7 +48,7 @@ const AddChoreForm = ({ day, onClose }) => {
           />
         </div>
         <div>
-          <label>Child Name:</label>
+          <label className='text-md font-semibold text-[#FFD166] mt-1 sm:mt-2'>Child Name:</label>
           <input
             type='text'
             value={childName}
@@ -66,7 +66,7 @@ const AddChoreForm = ({ day, onClose }) => {
         <button 
           type='button' 
           onClick={onClose}
-          className="w-1/2 border border-gray-300 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-50 transition duration-200">
+          className="w-1/2 border border-gray-300 text-white-700 py-2 px-4 rounded-md hover:bg-gray-50 transition duration-200">
           Cancel</button>
           </div>
       </form>
