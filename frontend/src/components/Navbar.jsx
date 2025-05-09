@@ -1,14 +1,20 @@
 import { Link } from 'react-router-dom';
 import { UserContext } from '../components/UserContext'; 
-import { useContext } from 'react'; 
+import { useContext, useState } from 'react'; 
+import AddChild from './AddChild';
 
 const Navbar = () => {
   const { logout, user } = useContext(UserContext); 
- //useContext logout (onclick button) will take curr. user out of localStorage (and associated token)
+ // useContext logout (onclick button) will take curr. user out of localStorage (and associated token)
  // the ?. in welcome {user?.name} simply means to not crash if no user.name found in local storage 
 
+  // boolean saying if user.type strictly equal to parent, then createChild is set to true
+  const createChild = user?.type === 'parent';
+  const [showAddChild, setShowAddChild] = useState(false);
+
+
   return (
-    <div className='flex justify-between sm:px-10'>
+    <div className='bg-gradient-to-b from-[#2563EB] to-[#06B6D4] flex justify-between sm:px-10'>
         {/* 5/6 - Daniel
           - Added overarching Navbar div to better control flex
         */}
@@ -47,11 +53,43 @@ const Navbar = () => {
             >Log Out</button> 
         </Link>
         <h4 className="hidden sm:block" style={{ color: 'white'}}>Welcome {user?.name}!</h4>
-        <h5 className="hidden sm:block" style={{ color: 'orange'}}>{user?.type} View</h5> 
+        <h5 className="hidden sm:block" style={{ color: 'orange'}}>{user?.type} View</h5>
+
         {/* 5/6 - Daniel
           - Separated original h4 into new line for increased responsiveness 
           - Added 'hidden sm:block' to hide those headings on very small screens 
         */}
+
+                {/* {createChild && ( */}
+        <button 
+          onClick={() => setShowAddChild(true)}
+          className='px-2 rounded-md mt-1'>
+            Add Child
+        </button>
+                {/* )} */}
+        
+        {/* 5/8 - Daniel
+          - Moved Add Child button and its conditionals from Weekview.jsx to Navbar.jsx 
+        */}
+
+      {showAddChild && (
+        <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'>
+          <div className='bg-white rounded-xl p-6 max-w-md w-full'>
+            <div className='flex justify-between items-center mb-4'>
+              <h3 className='text-xl font-bold text-primaryDark'>
+                Add New Child
+              </h3>
+              <button
+                onClick={() => setShowAddChild(false)}
+                className='text-gray-500 hover:text-gray-700'
+              >
+                x
+              </button>
+            </div>
+            <AddChild onClose={() => setShowAddChild(false)} />
+          </div>
+        </div>
+      )}
     </div>
     </div>
   );

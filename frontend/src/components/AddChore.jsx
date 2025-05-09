@@ -45,6 +45,7 @@ const AddChoreForm = ({ day, onClose }) => {
             type='text'
             value={choreName}
             onChange={(e) => setChoreName(e.target.value)}
+            className='bg-white ml-3 w-50 px-1 py-1 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-accentOrange'
           />
         </div>
         <div>
@@ -53,6 +54,7 @@ const AddChoreForm = ({ day, onClose }) => {
             type='text'
             value={childName}
             onChange={(e) => setChildName(e.target.value)}
+            className='bg-white ml-4.5 w-50 px-1 py-1 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-accentOrange'
           />
         </div>
 

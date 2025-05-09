@@ -1,16 +1,15 @@
 import { useContext, useState } from 'react';
 import { UserContext } from '../components/UserContext';
 import DayCard from '../components/DayCard';
-import AddChild from './AddChild';
 
 const daysOfWeek = [
-  'sunday',
-  'monday',
-  'tuesday',
-  'wednesday',
-  'thursday',
-  'friday',
-  'saturday'
+  'sun',
+  'mon',
+  'tue',
+  'wed',
+  'thu',
+  'fri',
+  'sat'
 ];
   {/* Daniel - changed order so that Sunday comes first, like a regular calendar */}
 
@@ -27,32 +26,17 @@ const WeekView = ({ chores }) => {
   //boolean saying if user.type strictly equal to parent, then canEdit is set to true
   const canEdit = user?.type === 'parent';
   const canCheckOff = user?.type === 'child';
-  const [showAddChild, setShowAddChild] = useState(false);
 
   return (
     <div className="px-10">
-    <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4'>
+    <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-2'>
       {daysOfWeek.map((day) => {
         const choresForDay = validChores.filter(
           (chore) => chore.day.toLowerCase() === day
         );  
-        {/*
-    <div>
-      <div className='grid grid-cols-7 gap-4'>
-        {daysOfWeek.map((day) => {
-          const choresForDay = validChores.filter(
-            (chore) => chore.day.toLowerCase() === day
-          );
-          {
-            /*
-          Previously, this part was causing an error:
-            - (chore) => chore.day.toLowerCase() === day
-            - Uncaught TypeError: Cannot read properties of null (reading 'toLowerCase')
-            - Daniel - added a filter function above the original logic to ensure proper loading of website
-        */
-          }
 
           return (
+            <div key={day} className="border border-gray-500 min-h-64 px-1">
             <DayCard
               key={day}
               day={day}
@@ -60,34 +44,10 @@ const WeekView = ({ chores }) => {
               canEdit={canEdit}
               canCheckOff={canCheckOff}
             />
+            </div>
           );
         })}
       </div>
-      
-      {canEdit && (
-        <div className=''>
-          <button onClick={() => setShowAddChild(true)}>Add A New Child</button>
-        </div>
-      )}
-
-      {showAddChild && (
-        <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'>
-          <div className='bg-white rounded-xl p-6 max-w-md w-full'>
-            <div className='flex justify-between items-center mb-4'>
-              <h3 className='text-xl font-bold text-primaryDark'>
-                Add New Child
-              </h3>
-              <button
-                onClick={() => setShowAddChild(false)}
-                className='text-gray-500 hover:text-gray-700'
-              >
-                x
-              </button>
-            </div>
-            <AddChild onClose={() => setShowAddChild(false)} />
-          </div>
-        </div>
-      )}
     </div>
   );
 };

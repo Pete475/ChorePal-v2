@@ -42,7 +42,7 @@ const AddChild = ({ onClose }) => {
         />
       </label>
       <button className='flex space-x-4 pt-4' type='submit'>
-        Create Child
+        Create Account
       </button>
     </form>
   );

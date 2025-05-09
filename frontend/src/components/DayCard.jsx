@@ -29,32 +29,32 @@ const DayCard = ({ day, chores, canEdit, canCheckOff }) => {
 
   //conditional isParent (with button below) makes it so button to add chores only shows up if user.type === 'parent'
   return (
-    <div className='flex flex-col'>
-      {' '}
-      {/* New Parent Div to contain both parts in a reversed manner */}
-      {/*
-      New Chore Button
-      - Daniel - moved button above the Day Card 
-        for uniform appearance + maximized space for chore details
-    */}
-      {isParent && (
-        <button
-          onClick={() => setShowAddForm(true)}
-          className='self-start bg-accentOrange text-white rounded-full px-4 py-2 text-sm font-semibold hover:bg-accentOrangeDark transition duration-200'
-        >
-          + New Chore
-        </button>
-      )}
-      {/* 
+    <div className='h-full flex flex-col'>
+      {/* New Parent Div to contain both parts in a reversed manner */}      
+    {/* 
       Day Card 
         - Individual DayCard was too large with the change to 7 columns
         - original Tailwind className = 'bg-primaryDark text-white rounded-2xl shadow-lg p-5 flex flex-col gap-5 mt-6 w-96'
         - Daniel - adjusted width to match the new 7 column weekday calendar view
     */}
       <div className='bg-primaryDark text-white rounded-2xl shadow-lg p-5 flex flex-col gap-5 mt-6 w-full'>
-        <h3 className='text-2xl font-bold tracking-wide'>
+        <h3 className='text-center text-xl font-bold tracking-wide'>
           {day.toUpperCase()}
         </h3>
+
+        {/*
+          New Chore Button
+            - Daniel - moved button below each day in the Day Card 
+                       for uniform appearance + maximized space for chore details
+        */}
+        
+        {/* {isParent && ( */} 
+        <button
+          onClick={() => setShowAddForm(true)}
+          className='self-center bg-[#FF6B6B] text-white rounded-full px-2 py-2 text-sm font-semibold hover:bg-accentOrangeDark transition duration-200'
+          >+ New Chore
+        </button>
+        {/* )} */}
 
         <div className='bg-surfaceLight rounded-xl p-4 flex flex-col gap-3'>
           {chores.length > 0 ? (
@@ -92,16 +92,15 @@ const DayCard = ({ day, chores, canEdit, canCheckOff }) => {
         */}
 
           {showAddForm && (
-            <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'>
-              <div className='bg-white rounded-xl p-6 max-w-md w-full'>
+            <div className='fixed inset-0 bg-gradient-to-b from-[#78C0E0] to-[#5DA9E9] bg-opacity-2 flex items-center justify-center z-50'>
+              <div className='bg-primaryDark rounded-xl p-6 max-w-md w-full'>
                 <div className='flex justify-between items-center mb-4'>
-                  <h3 className='text-xl font-bold text-primaryDark'>
+                  <h3 className='text-xl font-bold text-white'>
                     Add Chore for {day.toUpperCase()}
                   </h3>
                   <button
                     onClick={() => setShowAddForm(false)}
-                    className='text-gray-500 hover:text-gray-700'
-                  >
+                    className='text-white items-center hover:text-gray p-1 rounded-md'>
                     x
                   </button>
                 </div>
