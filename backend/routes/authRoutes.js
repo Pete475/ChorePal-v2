@@ -47,8 +47,7 @@ router.post('/login', async (req, res) => {
     // Create JWT
     const token = jwt.sign(
       { id: user._id, type: user.type },
-      process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_EXPIRES_IN }
+      process.env.JWT_SECRET
     );
 
     // Return user info without password or __v
