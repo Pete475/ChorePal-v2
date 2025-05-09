@@ -37,7 +37,14 @@ const choreSlice = createSlice({
     loading: false,
     error: null,
   },
-  reducers: {},
+  reducers: {
+    toggleChoreCompleted: (state, action) => {
+      const chore = state.chores.find((c) => c._id === action.payload);
+      if (chore) {
+        chore.complete = !chore.completed;
+      }
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchChores.pending, (state) => {
@@ -56,8 +63,9 @@ const choreSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(addChore.fulfilled, (state) => {
+      .addCase(addChore.fulfilled, (state, action) => {
         state.loading = false;
+        state.chores.push(action.payload); 
       })
       .addCase(addChore.rejected, (state, action) => {
         state.loading = false;
@@ -66,4 +74,5 @@ const choreSlice = createSlice({
   },
 });
 
+export const { toggleChoreCompleted } = choreSlice.actions; 
 export default choreSlice.reducer;

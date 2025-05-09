@@ -18,10 +18,10 @@ function Login() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    const endpoint = isLoginMode ? '/users/login' : '/users';
+    const endpoint = isLoginMode ? '/api/auth/login' : '/api/auth/register';
     const payload = isLoginMode
       ? { email, password }
-      : { email, password, name, children: [] };
+      : { email, password, username: name, type: 'parent' };
 
     try {
       const response = await fetch(`${BASE_URL}${endpoint}`, {
@@ -35,7 +35,7 @@ function Login() {
       const data = await response.json();
 
       if (isLoginMode) {
-        if (data.success) {
+        if (data.token) {
           setSuccess(true);
           setError('');
           localStorage.setItem('token', data.token);
@@ -49,7 +49,7 @@ function Login() {
           setSuccess(false);
         }
       } else {
-        if (data.insertedId) {
+        if (data._id) {
           setSuccess(true);
           setError('');
           setIsLoginMode(true);
