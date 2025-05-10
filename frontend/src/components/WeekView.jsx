@@ -1,10 +1,11 @@
 import { useEffect, useState, useContext } from 'react';
 import { UserContext } from '../components/UserContext';
 import DayCard from '../components/DayCard';
+import AddChoreForm from './AddChore';
 import AddChild from './AddChild';
 
 const WeekView = ({ chores }) => {
-  const [localChores, setLocalChores] = useState([]);
+  const [localChores, setLocalChores] = useState([]); 
 
   useEffect(() => {
     if (Array.isArray(chores)) {
