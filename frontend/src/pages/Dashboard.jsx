@@ -22,7 +22,7 @@ function Dashboard() {
   }, [error]);
 
   return (
-    <div className='min-h-screen bg-gradient-to-b from-[#78C0E0] to-[#5DA9E9]'>
+    <div className='min-h-screen bg-gradient-to-t from-[#7DD3FC] via-[#F1F5F9] to-[#FF9E80]'>
       {/* 5/6 - Daniel
         - Added className here to eliminate whitespace at the bottom */}
       <Navbar />
@@ -46,7 +46,7 @@ function Dashboard() {
               </div>
             </div>
           )}
-      <WeekView chores={chores} />
+      <WeekView chores={chores}/>
     </div>
   );
 }

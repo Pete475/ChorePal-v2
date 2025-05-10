@@ -29,7 +29,7 @@ const DayCard = ({ day, chores, canEdit, canCheckOff }) => {
 
   //conditional isParent (with button below) makes it so button to add chores only shows up if user.type === 'parent'
   return (
-    <div className='h-full flex flex-col'>
+    <div className='h-full w-full flex flex-col bg-white rounded-md pl-1 pr-1 z-10'>
       {/* New Parent Div to contain both parts in a reversed manner */}      
     {/* 
       Day Card 
@@ -37,7 +37,7 @@ const DayCard = ({ day, chores, canEdit, canCheckOff }) => {
         - original Tailwind className = 'bg-primaryDark text-white rounded-2xl shadow-lg p-5 flex flex-col gap-5 mt-6 w-96'
         - Daniel - adjusted width to match the new 7 column weekday calendar view
     */}
-      <div className='bg-primaryDark text-white rounded-2xl shadow-lg p-5 flex flex-col gap-5 mt-6 w-full'>
+      <div className='bg-[#fefee5] border-[0.5px] border-gray-700 text-black rounded-md shadow-lg pt-2 flex flex-col gap-2 mt-1 mb-1 w-full h-full'>
         <h3 className='text-center text-xl font-bold tracking-wide'>
           {day.toUpperCase()}
         </h3>
@@ -48,15 +48,15 @@ const DayCard = ({ day, chores, canEdit, canCheckOff }) => {
                        for uniform appearance + maximized space for chore details
         */}
         
-        {/* {isParent && ( */} 
+        {isParent && (  
         <button
           onClick={() => setShowAddForm(true)}
           className='self-center bg-[#FF6B6B] text-white rounded-full px-2 py-2 text-sm font-semibold hover:bg-accentOrangeDark transition duration-200'
           >+ New Chore
         </button>
-        {/* )} */}
+        )}
 
-        <div className='bg-surfaceLight rounded-xl p-4 flex flex-col gap-3'>
+        <div className='bg-surfaceLight rounded-xl p-3 flex flex-col gap-3 overflow-y-auto h-full'>
           {chores.length > 0 ? (
             <ul className='list-disc list-inside text-primaryDark space-y-1'>
               {chores.map((chore) => (
@@ -77,7 +77,7 @@ const DayCard = ({ day, chores, canEdit, canCheckOff }) => {
               ))}
             </ul>
           ) : (
-            <p className='text-sm text-white/70 italic'>No chores assigned.</p>
+            <p className='text-center text-sm text-black italic mb-2'>No chores assigned.</p>
           )}
 
           {/*
@@ -92,7 +92,7 @@ const DayCard = ({ day, chores, canEdit, canCheckOff }) => {
         */}
 
           {showAddForm && (
-            <div className='fixed inset-0 bg-gradient-to-b from-[#78C0E0] to-[#5DA9E9] bg-opacity-2 flex items-center justify-center z-50'>
+            <div className='fixed inset-0 bg-gradient-to-t from-[#7DD3FC] via-[#F1F5F9] to-[#FF9E80] bg-opacity-2 flex items-center justify-center z-50'>
               <div className='bg-primaryDark rounded-xl p-6 max-w-md w-full'>
                 <div className='flex justify-between items-center mb-4'>
                   <h3 className='text-xl font-bold text-white'>
@@ -110,6 +110,28 @@ const DayCard = ({ day, chores, canEdit, canCheckOff }) => {
           )}
         </div>
       </div>
+
+      <div className="absolute top-60 -left-2 w-20 h-20 pointer-events-none">
+                <img 
+                  src="../../public/tree.gif"  
+                  className="w-full h-full object-contain"
+                />
+              </div>
+
+      <div className="absolute bottom-0 right-10 w-20 h-20 pointer-events-none">
+        <img 
+          src="../../public/sleepy.gif"  
+          className="w-full h-full object-contain"
+        />
+      </div>
+
+      <div className="absolute bottom-0 left-10 w-24 h-24 pointer-events-none">
+        <img 
+          src="../../public/heart.gif"  
+          className="w-full h-full object-contain"
+        />
+      </div>
+
     </div>
   );
 };

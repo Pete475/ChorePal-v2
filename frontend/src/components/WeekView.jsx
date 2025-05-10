@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { UserContext } from '../components/UserContext';
 import DayCard from '../components/DayCard';
 
@@ -28,15 +28,15 @@ const WeekView = ({ chores }) => {
   const canCheckOff = user?.type === 'child';
 
   return (
-    <div className="px-10">
-    <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-2'>
+    <div className="px-12">
+    <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-1.5 h-[72vh]'>
       {daysOfWeek.map((day) => {
         const choresForDay = validChores.filter(
           (chore) => chore.day.toLowerCase() === day
         );  
 
           return (
-            <div key={day} className="border border-gray-500 min-h-64 px-1">
+            <div key={day} className="border border-gray-500 min-h-64 rounded-md">
             <DayCard
               key={day}
               day={day}
